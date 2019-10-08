@@ -1,0 +1,8 @@
+<design:component>
+	 <design:attribute name="AppName" label="AppName" />
+    <design:attribute name="CanvasNumber" label="CanvasNumber" />
+    <design:attribute name="width" label="width" />
+    <design:attribute name="height" label="height" />
+    <design:attribute name="SObjectList"  label="Canvas List"   datasource="apex://Canvas_PickList" />
+
+</design:component>
