@@ -1,0 +1,46 @@
+public class GenericCanvasControllerA {
+    
+    @AuraEnabled
+    public static String getApp(String mtdName){
+        return  [
+                SELECT 
+                Id, Label, ApiName__c, ConnectedApp__c, Filter__c, Object__c, Parameters__c
+                FROM DynamicCanvasMtd__mdt WHERE Label=:mtdName LIMIT 1
+            ].ConnectedApp__c;
+        
+        
+        
+    }
+    @AuraEnabled
+    public static String getParam(String mtdName,id ObjId){
+        DynamicCanvasMtd__mdt can=  [
+                SELECT 
+                Id, Label, ApiName__c, ConnectedApp__c, Filter__c, Object__c, Parameters__c
+                FROM DynamicCanvasMtd__mdt WHERE Label=:mtdName LIMIT 1
+            ];
+        List<String> parametri= can.Parameters__c.split(',');
+        List<String> ApiName= can.ApiName__c.split(',');
+        
+        String query='SELECT '+can.ApiName__c+' FROM '+can.Object__c+' WHERE id=\''+ObjId+'\'';
+        //if( can.Filter__c!=null) query+=' and '+can.Filter__c+' LIMIT 1';
+        query+=' LIMIT 1';
+        system.debug('SID QUERY: '+query);
+        SObject obj=Database.query(query);
+        
+        String JSONString;
+        
+        for(integer i=0; i<parametri.size(); i++ ){
+            if(i==0)
+            JSONString=parametri[i]+'='+obj.get(ApiName[i]);
+            else
+            JSONString+='&'+parametri[i]+'='+obj.get(ApiName[i]);
+            
+        }
+        
+        
+        return JSONString;
+        
+        
+    }
+
+}
