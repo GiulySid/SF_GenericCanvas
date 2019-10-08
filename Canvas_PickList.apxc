@@ -1,0 +1,25 @@
+global class Canvas_PickList extends VisualEditor.DynamicPickList{
+    
+    global override VisualEditor.DataRow getDefaultValue(){
+        VisualEditor.DataRow defaultValue = new VisualEditor.DataRow('Contact Card', 'Contact_Card');
+        return defaultValue;
+    }
+    global override VisualEditor.DynamicPickListRows getValues() {
+        VisualEditor.DynamicPickListRows  myValues = new VisualEditor.DynamicPickListRows();
+        
+          	List<DynamicCanvasMtd__mdt> lstDynRelListMdt =  [
+            	SELECT 
+            	Id, Label, ApiName__c, ConnectedApp__c, Filter__c, Object__c, Parameters__c
+            	FROM DynamicCanvasMtd__mdt
+            ];
+            
+            for(DynamicCanvasMtd__mdt objMdt : lstDynRelListMdt){
+            	
+                VisualEditor.DataRow value1 = new VisualEditor.DataRow(objMdt.Label.replace('_',' '), objMdt.Label);
+                myValues.addRow(value1);
+            }
+        
+        
+        return myValues;
+    }
+}
